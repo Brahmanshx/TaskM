@@ -1,2 +1,5 @@
-.env
-/node modules
+backend/goal-service/.env
+backend/api-gateway/.env
+backend/analytics-service/.env
+backend/node_modules
+frontend/node_modules
