@@ -84,6 +84,21 @@ const Goals = () => {
     }
   };
 
+  const [editingSubGoal, setEditingSubGoal] = useState(null); // { id, title, reminderTime }
+  const [tempReminder, setTempReminder] = useState('');
+
+  const handleUpdateSubGoal = async (id, data) => {
+    try {
+      await api.put(`/subgoals/${id}`, data, {
+        headers: { 'user-id': user?.id }
+      });
+      fetchGoals();
+      setEditingSubGoal(null);
+    } catch (error) {
+      console.error('Error updating sub-goal:', error);
+    }
+  };
+
   const handleToggleSubGoal = async (subGoalId) => {
     try {
       await api.put(`/subgoals/${subGoalId}/toggle`, {}, {

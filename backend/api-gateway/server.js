@@ -24,6 +24,7 @@ const services = [
   { route: '/progress', target: process.env.GOAL_SERVICE_URL },
   { route: '/analytics', target: process.env.ANALYTICS_SERVICE_URL },
   { route: '/ai', target: process.env.AI_SERVICE_URL },
+  { route: '/notifications', target: process.env.NOTIFICATION_SERVICE_URL },
 ];
 
 services.forEach(({ route, target }) => {

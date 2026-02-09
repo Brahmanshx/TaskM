@@ -3,7 +3,8 @@ const { Task } = require('../models');
 // Create Task
 exports.createTask = async (req, res) => {
   try {
-    const { title, description, status, dueDate } = req.body;
+    console.log('Create Task Request Body:', JSON.stringify(req.body));
+    const { title, description, status, dueDate, reminderTime } = req.body;
     // Assume userId comes from auth middleware (header) or body for now.
     const userId = req.headers['x-user-id'] || req.body.userId; 
     
@@ -11,7 +12,7 @@ exports.createTask = async (req, res) => {
        // Handle missing user ID
     }
 
-    const task = await Task.create({ title, description, status, userId, dueDate });
+    const task = await Task.create({ title, description, status, userId, dueDate, reminderTime });
     res.status(201).json(task);
   } catch (error) {
     console.error(error);
@@ -39,13 +40,15 @@ exports.getTasks = async (req, res) => {
 exports.updateTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, status } = req.body;
+    const { title, description, status, dueDate, reminderTime } = req.body;
     const task = await Task.findByPk(id);
     if (!task) return res.status(404).json({ message: 'Task not found' });
     
     task.title = title || task.title;
     task.description = description || task.description;
     task.status = status || task.status;
+    task.dueDate = dueDate !== undefined ? dueDate : task.dueDate;
+    task.reminderTime = reminderTime !== undefined ? reminderTime : task.reminderTime;
     await task.save();
     
     res.json(task);

@@ -92,7 +92,7 @@ exports.toggleSubGoal = async (req, res) => {
 exports.updateSubGoal = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description } = req.body;
+    const { title, description, reminderTime } = req.body;
     const userId = req.headers['user-id'];
 
     const subGoal = await SubGoal.findByPk(id, {
@@ -103,7 +103,11 @@ exports.updateSubGoal = async (req, res) => {
       return res.status(404).json({ message: 'Sub-goal not found' });
     }
 
-    await subGoal.update({ title, description });
+    await subGoal.update({ 
+      title: title !== undefined ? title : subGoal.title, 
+      description: description !== undefined ? description : subGoal.description,
+      reminderTime: reminderTime !== undefined ? reminderTime : subGoal.reminderTime
+    });
     res.json(subGoal);
   } catch (error) {
     console.error(error);
@@ -140,7 +144,7 @@ exports.deleteSubGoal = async (req, res) => {
 exports.createSubGoal = async (req, res) => {
   try {
     const { goalId } = req.params;
-    const { title, description } = req.body;
+    const { title, description, reminderTime } = req.body;
     const userId = req.headers['user-id'];
 
     // Verify goal belongs to user
@@ -157,7 +161,8 @@ exports.createSubGoal = async (req, res) => {
       title,
       description,
       order: maxOrder + 1,
-      completed: false
+      completed: false,
+      reminderTime
     });
 
     res.status(201).json(subGoal);

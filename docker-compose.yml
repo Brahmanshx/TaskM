@@ -44,6 +44,7 @@ services:
       - GOAL_SERVICE_URL=http://goal-service:3003
       - ANALYTICS_SERVICE_URL=http://analytics-service:3004
       - AI_SERVICE_URL=http://ai-service:8000
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3005
 
   user-service:
     build: ./backend/user-service
@@ -111,6 +112,21 @@ services:
       - "8000:8000"
     environment:
       - PORT=8000
+
+  notification-service:
+    build: ./backend/notification-service
+    container_name: task_manager_notification_service
+    ports:
+      - "3005:3005"
+    depends_on:
+      - postgres
+    environment:
+      - PORT=3005
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=admin
+      - DB_PASSWORD=password
+      - DB_NAME=task_db
 
 volumes:
   postgres_data:

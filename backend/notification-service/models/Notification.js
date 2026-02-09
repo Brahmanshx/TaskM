@@ -1,37 +1,37 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  const SubGoal = sequelize.define('SubGoal', {
+  const Notification = sequelize.define('Notification', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    goalId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    title: {
+    message: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
-      type: DataTypes.TEXT,
+    type: {
+      type: DataTypes.ENUM('reminder', 'system', 'goal'),
+      defaultValue: 'reminder',
     },
-    order: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    completed: {
+    isRead: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    reminderTime: {
-      type: DataTypes.DATE,
+    referenceId: {
+      type: DataTypes.INTEGER,
       allowNull: true,
-      field: 'reminderTime'
     },
+    referenceType: {
+      type: DataTypes.STRING, // 'task' or 'subgoal'
+      allowNull: true,
+    }
   });
 
-  return SubGoal;
+  return Notification;
 };

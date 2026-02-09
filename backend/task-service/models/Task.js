@@ -26,6 +26,11 @@ module.exports = (sequelize) => {
       type: DataTypes.DATEONLY,
       allowNull: true,
     },
+    reminderTime: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: 'reminderTime'
+    },
   });
 
   return Task;
