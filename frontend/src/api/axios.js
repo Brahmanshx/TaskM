@@ -20,8 +20,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 403 && error.response?.data?.message === 'Invalid token') {
-      // Token expired or invalid - clear auth and redirect to login
+    const status = error.response?.status;
+    const message = error.response?.data?.message;
+    if (
+      (status === 401 && message === 'No token provided') ||
+      (status === 403 && message === 'Invalid token')
+    ) {
+      // Token missing, expired, or invalid - clear auth and redirect to login
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';

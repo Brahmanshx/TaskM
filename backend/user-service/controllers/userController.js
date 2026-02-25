@@ -2,7 +2,7 @@ const { User } = require('../models');
 
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.user.id; // Assumes auth middleware sets req.user
+    const userId = req.headers['x-user-id']; // Set by API Gateway after JWT verification
     const user = await User.findByPk(userId, {
       attributes: { exclude: ['password'] }
     });
@@ -20,7 +20,7 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.headers['x-user-id']; // Set by API Gateway after JWT verification
     const { 
         firstName, lastName, phone, bio, location,
         jobTitle, department, organization 

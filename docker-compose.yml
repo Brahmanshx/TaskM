@@ -45,6 +45,7 @@ services:
       - ANALYTICS_SERVICE_URL=http://analytics-service:3004
       - AI_SERVICE_URL=http://ai-service:8000
       - NOTIFICATION_SERVICE_URL=http://notification-service:3005
+      - JWT_SECRET=supersecretkey
 
   user-service:
     build: ./backend/user-service
