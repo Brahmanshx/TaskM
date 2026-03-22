@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { X, Calendar, Tag, Clock, Link as LinkIcon, RotateCcw, AlignLeft } from 'lucide-react';
+import { X, Calendar, Tag, Clock, Link as LinkIcon, RotateCcw, AlignLeft, ArrowRight, Plus, Target } from 'lucide-react';
 
 export default function TaskModal({ isOpen, onClose, onSubmit, task = null, goals = [] }) {
   const [form, setForm] = useState({
@@ -183,6 +182,32 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task = null, goal
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-surface-500 group-hover:text-white transition-colors">
                   <Plus size={16} className="rotate-45" />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-surface-500 flex items-center gap-2">
+              <Clock size={12} className="text-primary-400" /> Daily Planning (Fixed Time Slot)
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="relative group">
+                <input
+                  type="time"
+                  value={form.timeBlockStart}
+                  onChange={(e) => setForm({ ...form, timeBlockStart: e.target.value })}
+                  className="w-full bg-brand-900 border border-white/5 rounded-2xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-primary-500 transition-all [color-scheme:dark]"
+                />
+                <span className="absolute left-4 -top-2 px-2 bg-brand-950 text-[10px] font-bold text-surface-600">Start Time</span>
+              </div>
+              <div className="relative group">
+                <input
+                  type="time"
+                  value={form.timeBlockEnd}
+                  onChange={(e) => setForm({ ...form, timeBlockEnd: e.target.value })}
+                  className="w-full bg-brand-900 border border-white/5 rounded-2xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-primary-500 transition-all [color-scheme:dark]"
+                />
+                <span className="absolute left-4 -top-2 px-2 bg-brand-950 text-[10px] font-bold text-surface-600">End Time</span>
               </div>
             </div>
           </div>

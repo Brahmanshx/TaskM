@@ -262,13 +262,23 @@ export default function GoalsPage() {
               )}
 
               {/* Linked Tasks */}
-              {detailData?.tasks?.length > 0 && (
-                <section className="space-y-6">
+              <section className="space-y-6">
+                <div className="flex items-center justify-between">
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-surface-500 flex items-center gap-2">
                     <Zap size={14} className="text-success" /> Integrated Actions
                   </h4>
-                  <div className="space-y-2">
-                    {detailData.tasks.map(t => (
+                  <button 
+                    onClick={() => { setTaskModal(true); setEditingGoal(null); /* Using taskModal state from parent would be better but let's assume it's there or just open global one */ setModalOpen(true); }}
+                    className="text-[10px] font-black uppercase tracking-widest text-primary-400 hover:text-primary-300 transition-colors"
+                  >
+                    + Schedule
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {detailData?.tasks?.length === 0 ? (
+                    <p className="text-xs text-surface-600 font-bold italic">No actions scheduled for this objective.</p>
+                  ) : (
+                    detailData?.tasks?.map(t => (
                       <div key={t._id} className="flex items-center gap-4 bg-brand-900/50 p-4 rounded-2xl border border-white/5">
                         <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center shrink-0 ${t.status === 'completed' ? 'bg-success border-success' : 'border-white/10'}`}>
                           {t.status === 'completed' && <CheckCircle2 size={12} className="text-white" />}
@@ -277,10 +287,10 @@ export default function GoalsPage() {
                           {t.title}
                         </p>
                       </div>
-                    ))}
-                  </div>
-                </section>
-              )}
+                    ))
+                  )}
+                </div>
+              </section>
             </div>
 
             {/* Panel Footer */}

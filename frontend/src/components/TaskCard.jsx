@@ -7,7 +7,8 @@ import {
   Edit3, 
   RotateCcw,
   Calendar,
-  MoreVertical
+  MoreVertical,
+  Target
 } from 'lucide-react';
 import { 
   formatDeadline, 

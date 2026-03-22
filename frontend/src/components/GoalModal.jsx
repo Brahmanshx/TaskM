@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { X, Calendar, Target, ChevronRight, Info } from 'lucide-react';
+import { X, Calendar, Target, ChevronRight, Info, Layers, ArrowRight } from 'lucide-react';
 
 export default function GoalModal({ isOpen, onClose, onSubmit, goal = null, goals = [] }) {
   const [form, setForm] = useState({
