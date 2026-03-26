@@ -19,6 +19,7 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(0);
   const [name, setName] = useState('');
+  const [error, setError] = useState('');
   
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ export default function AuthPage() {
     
     setLoading(true);
     try {
+      setError('');
       await authAPI.sendOtp(email);
       toast.success('OTP sent to your email!');
       setStep(2);
@@ -45,7 +47,9 @@ export default function AuthPage() {
       // Auto-focus first OTP input after step change
       setTimeout(() => otpInputs.current[0]?.focus(), 100);
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to send OTP');
+      const msg = err.response?.data?.message || 'Failed to send OTP';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -76,12 +80,15 @@ export default function AuthPage() {
 
     setLoading(true);
     try {
+      setError('');
       const res = await authAPI.verifyOtp(email, otpString, name);
       login(res.data.token, res.data.user);
       toast.success('Welcome back!');
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Invalid OTP');
+      const msg = err.response?.data?.message || 'Invalid OTP';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -184,6 +191,12 @@ export default function AuthPage() {
                       ))}
                     </div>
                   </div>
+
+                  {error && (
+                    <div className="bg-danger/10 border border-danger/20 rounded-xl p-3 animate-reveal">
+                      <p className="text-xs text-danger font-bold text-center">{error}</p>
+                    </div>
+                  )}
 
                   <div className="space-y-4">
                     <p className="text-sm text-surface-400 text-center">

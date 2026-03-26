@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { goalsAPI } from '../api/axios';
+import { tasksAPI, goalsAPI } from '../api/axios';
 import GoalCard from '../components/GoalCard';
 import GoalModal from '../components/GoalModal';
+import TaskModal from '../components/TaskModal';
 import EmptyState from '../components/EmptyState';
 import ProgressBar from '../components/ProgressBar';
 import { SkeletonList } from '../components/LoadingSpinner';
@@ -28,6 +29,7 @@ export default function GoalsPage() {
   const [activeTab, setActiveTab] = useState('all'); 
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [detailData, setDetailData] = useState(null);
+  const [taskModalOpen, setTaskModalOpen] = useState(false);
 
   useEffect(() => { fetchGoals(); }, [activeTab]);
 
@@ -85,6 +87,21 @@ export default function GoalsPage() {
       setDetailData(data);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleTaskCreate = async (data) => {
+    try {
+      await tasksAPI.create({ ...data, goalId: selectedGoal?._id || data.goalId });
+      setTaskModalOpen(false);
+      if (selectedGoal) {
+        // Refresh the detail data
+        const { data: refreshed } = await goalsAPI.getOne(selectedGoal._id);
+        setDetailData(refreshed);
+      }
+      toast.success('Task scheduled successfully');
+    } catch (err) {
+      toast.error('Failed to schedule task');
     }
   };
 
@@ -268,7 +285,7 @@ export default function GoalsPage() {
                     <Zap size={14} className="text-success" /> Integrated Actions
                   </h4>
                   <button 
-                    onClick={() => { setTaskModal(true); setEditingGoal(null); /* Using taskModal state from parent would be better but let's assume it's there or just open global one */ setModalOpen(true); }}
+                    onClick={() => setTaskModalOpen(true)}
                     className="text-[10px] font-black uppercase tracking-widest text-primary-400 hover:text-primary-300 transition-colors"
                   >
                     + Schedule
@@ -309,6 +326,13 @@ export default function GoalsPage() {
       {/* Modals */}
       <GoalModal isOpen={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleCreate} goals={goals} />
       <GoalModal isOpen={!!editingGoal} onClose={() => setEditingGoal(null)} onSubmit={handleUpdate} goal={editingGoal} goals={goals} />
+      <TaskModal 
+        isOpen={taskModalOpen} 
+        onClose={() => setTaskModalOpen(false)} 
+        onSubmit={handleTaskCreate}
+        task={selectedGoal ? { goalId: selectedGoal._id } : null}
+        goals={goals}
+      />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { X, Calendar, Tag, Clock, Link as LinkIcon, RotateCcw, AlignLeft, ArrowRight, Plus, Target } from 'lucide-react';
 
 export default function TaskModal({ isOpen, onClose, onSubmit, task = null, goals = [] }) {
